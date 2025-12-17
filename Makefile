@@ -33,18 +33,18 @@ help:
 ## Build all containers
 build:
 	@echo "${YELLOW}Building all containers...${RESET}"
-	docker-compose build
+	docker compose build
 
 ## Start all containers (detached)
 up:
 	@echo "${YELLOW}Starting up...${RESET}"
-	docker-compose up -d
+	docker compose up -d
 	@echo "${GREEN}Stack is running!${RESET}"
 
 ## Stop all containers
 down:
 	@echo "${YELLOW}Stopping...${RESET}"
-	docker-compose down
+	docker compose down
 
 ## Restart all containers
 restart: down up
@@ -52,9 +52,9 @@ restart: down up
 ## View logs (usage: make logs v=82)
 logs:
 	@if [ -z "$(v)" ]; then \
-		docker-compose logs -f; \
+		docker compose logs -f; \
 	else \
-		docker-compose logs -f php$(v); \
+		docker compose logs -f php$(v); \
 	fi
 
 ## Access container shell (usage: make shell v=82)
