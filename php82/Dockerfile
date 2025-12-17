@@ -1,4 +1,5 @@
 FROM php:8.2-fpm
+COPY --from=composer:latest /usr/bin/composer /usr/local/bin/composer
 
 COPY install.sh /usr/local/bin/install.sh
 RUN chmod +x /usr/local/bin/install.sh && /usr/local/bin/install.sh

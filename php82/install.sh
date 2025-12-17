@@ -16,4 +16,5 @@ docker-php-ext-install -j$(nproc) \
 
 # Cleanup default configuration files
 
+
 apt-get clean && rm -rf /var/lib/apt/lists/*

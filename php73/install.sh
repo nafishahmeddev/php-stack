@@ -23,4 +23,5 @@ docker-php-ext-install -j$(nproc) \
 # This ensures that extensions are NOT enabled twice (once by default, once by your config).
 # You will strictly enable them in your single php.ini file with 'extension=xxx'
 
+
 apt-get clean && rm -rf /var/lib/apt/lists/*

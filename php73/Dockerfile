@@ -1,4 +1,5 @@
 FROM php:7.3-fpm
+COPY --from=composer:latest /usr/bin/composer /usr/local/bin/composer
 
 # 1. Installer Script
 COPY install.sh /usr/local/bin/install.sh
