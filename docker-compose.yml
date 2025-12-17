@@ -8,6 +8,7 @@ services:
       - "9073:9000"
     volumes:
       - ./php73/php.ini:/usr/local/etc/php/php.ini
+      - /var/www:/var/www
 
   php74:
     build:
@@ -18,6 +19,7 @@ services:
       - "9074:9000"
     volumes:
       - ./php74/php.ini:/usr/local/etc/php/php.ini
+      - /var/www:/var/www
 
   php80:
     build:
@@ -28,6 +30,7 @@ services:
       - "9080:9000"
     volumes:
       - ./php80/php.ini:/usr/local/etc/php/php.ini
+      - /var/www:/var/www
 
   php81:
     build:
@@ -38,6 +41,7 @@ services:
       - "9081:9000"
     volumes:
       - ./php81/php.ini:/usr/local/etc/php/php.ini
+      - /var/www:/var/www
 
   php82:
     build:
@@ -48,3 +52,4 @@ services:
       - "9082:9000"
     volumes:
       - ./php82/php.ini:/usr/local/etc/php/php.ini
+      - /var/www:/var/www
