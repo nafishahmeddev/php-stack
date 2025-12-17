@@ -22,6 +22,5 @@ docker-php-ext-install -j$(nproc) \
 # 2. Cleanup default configuration files
 # This ensures that extensions are NOT enabled twice (once by default, once by your config).
 # You will strictly enable them in your single php.ini file with 'extension=xxx'
-rm -f /usr/local/etc/php/conf.d/docker-php-ext-*.ini
 
 apt-get clean && rm -rf /var/lib/apt/lists/*

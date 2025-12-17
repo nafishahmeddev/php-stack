@@ -6,7 +6,7 @@ RUN chmod +x /usr/local/bin/install.sh && /usr/local/bin/install.sh
 
 # 2. PHP Configuration (One File)
 # We copy it initially to have a default, but it will be mounted over by docker-compose.
-COPY config.ini /usr/local/etc/php/php.ini
+COPY php.ini /usr/local/etc/php/php.ini
 
 # 3. FPM Socket Configuration
 COPY php-fpm.conf /usr/local/etc/php-fpm.d/zz-socket.conf

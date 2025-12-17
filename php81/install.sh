@@ -15,6 +15,5 @@ docker-php-ext-install -j$(nproc) \
     sysvmsg sysvsem sysvshm xsl zip gd opcache
 
 # Cleanup default configuration files
-rm -f /usr/local/etc/php/conf.d/docker-php-ext-*.ini
 
 apt-get clean && rm -rf /var/lib/apt/lists/*

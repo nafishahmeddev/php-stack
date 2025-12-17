@@ -3,43 +3,48 @@ services:
     build:
       context: ./php73
     container_name: php73-fpm
+    restart: unless-stopped
     ports:
       - "9073:9000"
     volumes:
-      - ./php73/config.ini:/usr/local/etc/php/php.ini
+      - ./php73/php.ini:/usr/local/etc/php/php.ini
 
   php74:
     build:
       context: ./php74
     container_name: php74-fpm
+    restart: unless-stopped
     ports:
       - "9074:9000"
     volumes:
-      - ./php74/config.ini:/usr/local/etc/php/php.ini
+      - ./php74/php.ini:/usr/local/etc/php/php.ini
 
   php80:
     build:
       context: ./php80
     container_name: php80-fpm
+    restart: unless-stopped
     ports:
       - "9080:9000"
     volumes:
-      - ./php80/config.ini:/usr/local/etc/php/php.ini
+      - ./php80/php.ini:/usr/local/etc/php/php.ini
 
   php81:
     build:
       context: ./php81
     container_name: php81-fpm
+    restart: unless-stopped
     ports:
       - "9081:9000"
     volumes:
-      - ./php81/config.ini:/usr/local/etc/php/php.ini
+      - ./php81/php.ini:/usr/local/etc/php/php.ini
 
   php82:
     build:
       context: ./php82
     container_name: php82-fpm
+    restart: unless-stopped
     ports:
       - "9082:9000"
     volumes:
-      - ./php82/config.ini:/usr/local/etc/php/php.ini
+      - ./php82/php.ini:/usr/local/etc/php/php.ini
