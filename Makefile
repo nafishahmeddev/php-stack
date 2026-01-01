@@ -17,10 +17,10 @@ VERSIONS := 73 74 80 84
 # Helper to determine compose file args
 ifndef v
 	# If no version specified, include all
-	COMPOSE_FILES := $(foreach ver,$(VERSIONS),-f docker-compose.php$(ver).yml)
+	COMPOSE_FILES := $(foreach ver,$(VERSIONS),-f docker-compose.php$(ver).yml) -f docker-compose.mysql.yml
 else
 	# specific version
-	COMPOSE_FILES := -f docker-compose.php$(v).yml
+	COMPOSE_FILES := -f docker-compose.php$(v).yml -f docker-compose.mysql.yml
 endif
 
 COMPOSE_CMD := docker compose $(COMPOSE_FILES)
