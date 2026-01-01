@@ -14,13 +14,18 @@ TARGET_MAX_CHAR_NUM=20
 # Define versions
 VERSIONS := 73 74 80 84
 
+# MySQL Compose File
+MYSQL_COMPOSE := -f docker-compose.mysql.yml
+
 # Helper to determine compose file args
-ifndef v
-	# If no version specified, include all
-	COMPOSE_FILES := $(foreach ver,$(VERSIONS),-f docker-compose.php$(ver).yml) -f docker-compose.mysql.yml
+ifeq ($(v),mysql)
+	COMPOSE_FILES := $(MYSQL_COMPOSE)
+else ifndef v
+	# If no version specified, include all PHP + MySQL
+	COMPOSE_FILES := $(foreach ver,$(VERSIONS),-f docker-compose.php$(ver).yml) $(MYSQL_COMPOSE)
 else
-	# specific version
-	COMPOSE_FILES := -f docker-compose.php$(v).yml -f docker-compose.mysql.yml
+	# specific version (PHP)
+	COMPOSE_FILES := -f docker-compose.php$(v).yml
 endif
 
 COMPOSE_CMD := docker compose $(COMPOSE_FILES)
@@ -31,7 +36,7 @@ help:
 	@echo '${CYAN}Phurdle${RESET}'
 	@echo ''
 	@echo 'Usage:'
-	@echo '  ${YELLOW}make${RESET} ${GREEN}<target>${RESET} [v=version]'
+	@echo '  ${YELLOW}make${RESET} ${GREEN}<target>${RESET} [v=version|mysql]'
 	@echo ''
 	@echo 'Targets:'
 	@awk '/^[a-zA-Z\-\_0-9]+:/ { \
