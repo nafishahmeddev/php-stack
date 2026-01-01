@@ -1,0 +1,15 @@
+version: '3.8'
+
+services:
+  php80:
+    build:
+      context: ./php80
+    container_name: php80-fpm
+    restart: unless-stopped
+    ports:
+      - "9080:9000"
+    volumes:
+      - ./php80/php.ini:/etc/php/8.0/fpm/php.ini
+      - ./php80/php.ini:/etc/php/8.0/cli/php.ini
+      - ./php80/php-fpm.conf:/etc/php/8.0/fpm/pool.d/z-overrides.conf
+      - /var/www:/var/www

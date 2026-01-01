@@ -11,13 +11,27 @@ TARGET_MAX_CHAR_NUM=20
 
 .PHONY: help build up down restart logs shell composer install
 
+# Define versions
+VERSIONS := 73 74 80 81 82
+
+# Helper to determine compose file args
+ifndef v
+	# If no version specified, include all
+	COMPOSE_FILES := $(foreach ver,$(VERSIONS),-f docker-compose.php$(ver).yml)
+else
+	# specific version
+	COMPOSE_FILES := -f docker-compose.php$(v).yml
+endif
+
+COMPOSE_CMD := docker compose $(COMPOSE_FILES)
+
 ## Show help
 help:
 	@echo ''
 	@echo '${CYAN}PHP Stack Manager${RESET}'
 	@echo ''
 	@echo 'Usage:'
-	@echo '  ${YELLOW}make${RESET} ${GREEN}<target>${RESET}'
+	@echo '  ${YELLOW}make${RESET} ${GREEN}<target>${RESET} [v=version]'
 	@echo ''
 	@echo 'Targets:'
 	@awk '/^[a-zA-Z\-\_0-9]+:/ { \
@@ -30,31 +44,31 @@ help:
 	} \
 	{ lastLine = $$0 }' $(MAKEFILE_LIST)
 
-## Build all containers
+## Build containers (all or v=XX)
 build:
-	@echo "${YELLOW}Building all containers...${RESET}"
-	docker compose build
+	@echo "${YELLOW}Building...${RESET}"
+	$(COMPOSE_CMD) build
 
-## Start all containers (detached)
+## Start containers (all or v=XX)
 up:
 	@echo "${YELLOW}Starting up...${RESET}"
-	docker compose up -d
+	$(COMPOSE_CMD) up -d
 	@echo "${GREEN}Stack is running!${RESET}"
 
-## Stop all containers
+## Stop containers (all or v=XX)
 down:
 	@echo "${YELLOW}Stopping...${RESET}"
-	docker compose down
+	$(COMPOSE_CMD) down
 
-## Restart all containers
+## Restart containers
 restart: down up
 
-## View logs (usage: make logs v=82)
+## View logs (usage: make logs [v=82])
 logs:
 	@if [ -z "$(v)" ]; then \
-		docker compose logs -f; \
+		$(COMPOSE_CMD) logs -f; \
 	else \
-		docker compose logs -f php$(v); \
+		$(COMPOSE_CMD) logs -f php$(v); \
 	fi
 
 ## Access container shell (usage: make shell v=82)

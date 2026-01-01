@@ -1,0 +1,15 @@
+version: '3.8'
+
+services:
+  php73:
+    build:
+      context: ./php73
+    container_name: php73-fpm
+    restart: unless-stopped
+    ports:
+      - "9073:9000"
+    volumes:
+      - ./php73/php.ini:/etc/php/7.3/fpm/php.ini
+      - ./php73/php.ini:/etc/php/7.3/cli/php.ini
+      - ./php73/php-fpm.conf:/etc/php/7.3/fpm/pool.d/z-overrides.conf
+      - /var/www:/var/www
