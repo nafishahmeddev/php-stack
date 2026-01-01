@@ -10,9 +10,5 @@ services:
     ports:
       - "3306:3306"
     volumes:
-      - mysql_data:/var/lib/mysql
+      - ./mysql/data:/var/lib/mysql
       - ./mysql/mysqld.cnf:/etc/mysql/conf.d/mysqld.cnf
-
-volumes:
-  mysql_data:
-    driver: local
