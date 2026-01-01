@@ -1,4 +1,4 @@
-# Beautiful Makefile for PHP Stack Management
+# Beautiful Makefile for Phurdle
 
 # Colors
 GREEN  := $(shell tput -Txterm setaf 2)
@@ -28,7 +28,7 @@ COMPOSE_CMD := docker compose $(COMPOSE_FILES)
 ## Show help
 help:
 	@echo ''
-	@echo '${CYAN}PHP Stack Manager${RESET}'
+	@echo '${CYAN}Phurdle${RESET}'
 	@echo ''
 	@echo 'Usage:'
 	@echo '  ${YELLOW}make${RESET} ${GREEN}<target>${RESET} [v=version]'
