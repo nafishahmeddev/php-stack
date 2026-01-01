@@ -18,14 +18,27 @@ VERSIONS := 73 74 80 84
 MYSQL_COMPOSE := -f docker-compose.mysql.yml
 
 # Helper to determine compose file args
-ifeq ($(v),mysql)
-	COMPOSE_FILES := $(MYSQL_COMPOSE)
-else ifndef v
-	# If no version specified, include all PHP + MySQL
-	COMPOSE_FILES := $(foreach ver,$(VERSIONS),-f docker-compose.php$(ver).yml) $(MYSQL_COMPOSE)
+ifdef app
+	ifeq ($(app),mysql)
+		COMPOSE_FILES := $(MYSQL_COMPOSE)
+	else ifeq ($(app),php)
+		ifdef v
+			COMPOSE_FILES := -f docker-compose.php$(v).yml
+		else
+			COMPOSE_FILES := $(foreach ver,$(VERSIONS),-f docker-compose.php$(ver).yml)
+		endif
+	endif
 else
-	# specific version (PHP)
-	COMPOSE_FILES := -f docker-compose.php$(v).yml
+	# Backward compatibility / Default behavior
+	ifeq ($(v),mysql)
+		COMPOSE_FILES := $(MYSQL_COMPOSE)
+	else ifndef v
+		# If no version specified, include all PHP + MySQL
+		COMPOSE_FILES := $(foreach ver,$(VERSIONS),-f docker-compose.php$(ver).yml) $(MYSQL_COMPOSE)
+	else
+		# specific version (PHP)
+		COMPOSE_FILES := -f docker-compose.php$(v).yml
+	endif
 endif
 
 COMPOSE_CMD := docker compose $(COMPOSE_FILES)
@@ -36,7 +49,7 @@ help:
 	@echo '${CYAN}Phurdle${RESET}'
 	@echo ''
 	@echo 'Usage:'
-	@echo '  ${YELLOW}make${RESET} ${GREEN}<target>${RESET} [v=version|mysql]'
+	@echo '  ${YELLOW}make${RESET} ${GREEN}<target>${RESET} [app=php|mysql] [v=version]'
 	@echo ''
 	@echo 'Targets:'
 	@awk '/^[a-zA-Z\-\_0-9]+:/ { \
