@@ -1,0 +1,25 @@
+[mysqld]
+# Basic Settings
+user            = mysql
+bind-address            = 0.0.0.0
+mysqlx-bind-address     = 0.0.0.0
+
+# Fine Tuning
+key_buffer_size         = 16M
+myisam-recover-options  = BACKUP
+
+# Logging
+# log_error = /dev/stderr
+max_binlog_size   = 100M
+
+# Optimized configuration (from user request)
+max_connections = 50
+innodb_buffer_pool_size = 1G
+tmp_table_size = 32M
+max_heap_table_size = 32M
+table_open_cache = 200
+sort_buffer_size = 1M
+join_buffer_size = 1M
+innodb_log_file_size = 64M
+innodb_log_buffer_size = 8M
+thread_cache_size = 8
