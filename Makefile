@@ -12,7 +12,7 @@ TARGET_MAX_CHAR_NUM=20
 .PHONY: help build up down restart logs shell composer install
 
 # Define versions
-VERSIONS := 73 74 80 81 82
+VERSIONS := 73 74 80 84
 
 # Helper to determine compose file args
 ifndef v

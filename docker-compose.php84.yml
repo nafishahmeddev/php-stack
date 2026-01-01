@@ -1,0 +1,15 @@
+version: '3.8'
+
+services:
+  php84:
+    build:
+      context: ./php84
+    container_name: php84-fpm
+    restart: unless-stopped
+    ports:
+      - "9084:9000"
+    volumes:
+      - ./php84/php.ini:/etc/php/8.4/fpm/php.ini
+      - ./php84/php.ini:/etc/php/8.4/cli/php.ini
+      - ./php84/php-fpm.conf:/etc/php/8.4/fpm/pool.d/z-overrides.conf
+      - /var/www:/var/www
