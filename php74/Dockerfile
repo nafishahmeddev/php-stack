@@ -38,6 +38,10 @@ RUN apt-get update && apt-get install -y \
     xfonts-75dpi \
     xfonts-base \
     fontconfig \
+    wget \
+    && wget http://archive.ubuntu.com/ubuntu/pool/main/o/openssl/libssl1.1_1.1.1f-1ubuntu2_amd64.deb \
+    && dpkg -i libssl1.1_1.1.1f-1ubuntu2_amd64.deb \
+    && rm libssl1.1_1.1.1f-1ubuntu2_amd64.deb \
     && apt-get clean && rm -rf /var/lib/apt/lists/*
 
 # 3. Configure PHP-FPM
