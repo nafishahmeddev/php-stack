@@ -22,7 +22,6 @@ for DB_NAME in "${DATABASES[@]}"; do
     mkdir -p $BACKUP_DIR
 
     # Backup file
-    # Backup file
     BACKUP_FILE="$BACKUP_DIR/backup_$DATE.sql.gz"
 
     # mysqldump command to create the backup and compress it
