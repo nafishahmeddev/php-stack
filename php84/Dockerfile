@@ -26,6 +26,19 @@ RUN apt-get install -y \
     && php -r "readfile('https://getcomposer.org/installer');" | php -- --install-dir=/usr/bin/ --filename=composer \
     && apt-get clean && rm -rf /var/lib/apt/lists/*
 
+# 2.5. Install wkhtmltopdf dependencies
+RUN apt-get update && apt-get install -y \
+    libxrender1 \
+    libfontconfig1 \
+    libxext6 \
+    libx11-6 \
+    libjpeg-turbo8 \
+    libpng16-16 \
+    xfonts-75dpi \
+    xfonts-base \
+    fontconfig \
+    && apt-get clean && rm -rf /var/lib/apt/lists/*
+
 # 3. Configure PHP-FPM
 # Create the PID directory
 RUN mkdir -p /run/php
