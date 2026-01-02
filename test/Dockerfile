@@ -58,7 +58,11 @@ RUN phpdismod -v 7.3 -s ALL opcache || true
 COPY test-php.ini /etc/php/7.3/cli/php.ini
 COPY test-php-fpm.conf /etc/php/7.3/fpm/pool.d/z-test.conf
 
-WORKDIR /var/www
+# Create test directory and initialize composer
+RUN mkdir -p /test && cd /test && composer init --name="test/spreadsheet" --no-interaction \
+    && composer config audit.block-insecure false
+
+WORKDIR /test
 
 EXPOSE 9000
 

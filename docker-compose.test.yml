@@ -10,8 +10,7 @@ services:
       - ./test/test-php.ini:/etc/php/7.3/fpm/php.ini
       - ./test/test-php.ini:/etc/php/7.3/cli/php.ini
       - ./test/test-php-fpm.conf:/etc/php/7.3/fpm/pool.d/z-test.conf
-      - /var/www:/var/www
-      - ./test-spreadsheet.php:/var/www/test-spreadsheet.php
+      - ./test/test.php:/test/test.php
     networks:
       - php-network
 
