@@ -30,6 +30,9 @@ RUN apt-get install -y \
 # Create the PID directory
 RUN mkdir -p /run/php
 
+# Disable opcache by moving it out
+RUN phpdismod -v 8.4 -s ALL opcache || true
+
 # 4. Custom Scripts & Configs
 COPY install.sh /usr/local/bin/install.sh
 RUN chmod +x /usr/local/bin/install.sh && /usr/local/bin/install.sh
