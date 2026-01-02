@@ -4,10 +4,10 @@
 DATE=$(date +"%Y%m%d_%H%M%S")
 
 # MySQL Host and Port (for Docker container accessed from host)
-MYSQL_HOST="localhost"
+MYSQL_HOST="127.0.0.1"
 MYSQL_PORT="3306"
-MYSQL_USER="backup_user"
-MYSQL_PASSWORD="backup_password"
+MYSQL_USER="dumper"
+MYSQL_PASSWORD="******"
 
 ## declare an array variable
 declare -a DATABASES=("alameen" "pakizaknowledgecity")
