@@ -24,6 +24,9 @@ RUN apt-get install -y \
     php7.4-xml \
     php7.4-xsl \
     php7.4-zip \
+    php7.4-gmp \
+    php7.4-intl \
+    php7.4-soap \
     && php -r "readfile('https://getcomposer.org/installer');" | php -- --install-dir=/usr/bin/ --filename=composer \
     && apt-get clean && rm -rf /var/lib/apt/lists/*
 
