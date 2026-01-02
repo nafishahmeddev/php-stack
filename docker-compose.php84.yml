@@ -11,3 +11,9 @@ services:
       - ./php84/php.ini:/etc/php/8.4/cli/php.ini
       - ./php84/php-fpm.conf:/etc/php/8.4/fpm/pool.d/z-overrides.conf
       - /var/www:/var/www
+    networks:
+      - php-network
+
+networks:
+  php-network:
+    driver: bridge

@@ -8,11 +8,17 @@ services:
       MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
 
     ports:
-      - "3306:3306"
+      - "0.0.0.0:3306:3306"
     volumes:
       - mysql_data:/var/lib/mysql
       - ./mysql/mysqld.cnf:/etc/mysql/conf.d/mysqld.cnf
+    networks:
+      - php-network
 
 volumes:
   mysql_data:
     driver: local
+
+networks:
+  php-network:
+    driver: bridge

@@ -1,5 +1,5 @@
 <?php
-$servername = "127.0.0.1";
+$servername = "mysql";  // Docker service name
 $username = "root";
 $password = "12345678";
 

@@ -11,3 +11,9 @@ services:
       - ./php73/php.ini:/etc/php/7.3/cli/php.ini
       - ./php73/php-fpm.conf:/etc/php/7.3/fpm/pool.d/z-overrides.conf
       - /var/www:/var/www
+    networks:
+      - php-network
+
+networks:
+  php-network:
+    driver: bridge
