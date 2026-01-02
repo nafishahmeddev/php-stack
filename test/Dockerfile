@@ -8,25 +8,25 @@ RUN apt-get update && apt-get install -y \
     && add-apt-repository -y ppa:ondrej/php \
     && apt-get update
 
-# 2. Install PHP 7.4 & Extensions for Testing
+# 2. Install PHP 7.3 & Extensions for Testing
 RUN apt-get install -y \
-    php7.4-fpm \
-    php7.4-cli \
-    php7.4-common \
-    php7.4-bcmath \
-    php7.4-curl \
-    php7.4-gd \
-    php7.4-json \
-    php7.4-mbstring \
-    php7.4-mysql \
-    php7.4-opcache \
-    php7.4-readline \
-    php7.4-xml \
-    php7.4-xsl \
-    php7.4-zip \
-    php7.4-gmp \
-    php7.4-intl \
-    php7.4-soap \
+    php7.3-fpm \
+    php7.3-cli \
+    php7.3-common \
+    php7.3-bcmath \
+    php7.3-curl \
+    php7.3-gd \
+    php7.3-json \
+    php7.3-mbstring \
+    php7.3-mysql \
+    php7.3-opcache \
+    php7.3-readline \
+    php7.3-xml \
+    php7.3-xsl \
+    php7.3-zip \
+    php7.3-gmp \
+    php7.3-intl \
+    php7.3-soap \
     && php -r "readfile('https://getcomposer.org/installer');" | php -- --install-dir=/usr/bin/ --filename=composer \
     && apt-get clean && rm -rf /var/lib/apt/lists/*
 
@@ -52,14 +52,14 @@ RUN apt-get update && apt-get install -y \
 RUN mkdir -p /run/php
 
 # Disable opcache for testing
-RUN phpdismod -v 7.4 -s ALL opcache || true
+RUN phpdismod -v 7.3 -s ALL opcache || true
 
 # Copy configs
-COPY test-php.ini /etc/php/7.4/cli/php.ini
-COPY test-php-fpm.conf /etc/php/7.4/fpm/pool.d/z-test.conf
+COPY test-php.ini /etc/php/7.3/cli/php.ini
+COPY test-php-fpm.conf /etc/php/7.3/fpm/pool.d/z-test.conf
 
 WORKDIR /var/www
 
 EXPOSE 9000
 
-CMD ["php-fpm7.4", "-F"]
+CMD ["php-fpm7.3", "-F"]
