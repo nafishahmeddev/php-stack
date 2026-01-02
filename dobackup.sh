@@ -7,7 +7,7 @@ DATE=$(date +"%Y%m%d_%H%M%S")
 MYSQL_HOST="127.0.0.1"
 MYSQL_PORT="3306"
 MYSQL_USER="dumper"
-MYSQL_PASSWORD="******"
+MYSQL_PASSWORD="your_dumper_password_here"
 
 ## declare an array variable
 declare -a DATABASES=("alameen" "pakizaknowledgecity")
@@ -22,10 +22,11 @@ for DB_NAME in "${DATABASES[@]}"; do
     mkdir -p $BACKUP_DIR
 
     # Backup file
+    # Backup file
     BACKUP_FILE="$BACKUP_DIR/backup_$DATE.sql.gz"
 
-    MYSQL_PWD="$MYSQL_PASSWORD" # mysqldump command to create the backup and compress it
-    mysqldump -h $MYSQL_HOST -P $MYSQL_PORT -u $MYSQL_USER $DB_NAME | gzip > $BACKUP_FILE
+    # mysqldump command to create the backup and compress it
+    MYSQL_PWD="$MYSQL_PASSWORD" mysqldump -h $MYSQL_HOST -P $MYSQL_PORT -u $MYSQL_USER $DB_NAME | gzip > $BACKUP_FILE
 
     if [ $? -eq 0 ]; then
         echo "Backup of $DB_NAME completed: $BACKUP_FILE"
