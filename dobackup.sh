@@ -15,7 +15,7 @@ DATE=$(date +"%Y%m%d_%H%M%S")
 MYSQL_HOST="127.0.0.1"
 MYSQL_PORT="3306"
 MYSQL_USER="dumper"
-MYSQL_PASSWORD="your_dumper_password_here"
+MYSQL_PASSWORD="@#Password123@#"
 
 # Statistics
 TOTAL_DATABASES=0
@@ -24,13 +24,8 @@ FAILED_BACKUPS=0
 TOTAL_SIZE=0
 
 # Print header
-clear
-echo -e "${CYAN}════════════════════════════════════════════════════════${NC}"
-echo -e "${CYAN}          🔐 DATABASE BACKUP SCRIPT 🔐${NC}"
-echo -e "${CYAN}════════════════════════════════════════════════════════${NC}"
 echo ""
-echo -e "${BLUE}ℹ️  Starting backup process...${NC}"
-echo ""
+echo -e "${BLUE}Starting backup process...${NC}"
 
 ## declare an array variable
 declare -a DATABASES=("alameen" "pakizaknowledgecity")
@@ -41,7 +36,7 @@ for i in "${!DATABASES[@]}"; do
     DB_NAME="${DATABASES[$i]}"
     CURRENT=$((i + 1))
     
-    echo -e "${BLUE}[${CURRENT}/${TOTAL_DATABASES}] Backing up: ${CYAN}${DB_NAME}${NC}"
+    echo -e "${BLUE}[${CURRENT}/${TOTAL_DATABASES}] ${DB_NAME}${NC}"
     
     # Backup directory
     BACKUP_DIR="/home/alameen/backup/$DB_NAME/mysql"
@@ -53,7 +48,7 @@ for i in "${!DATABASES[@]}"; do
     BACKUP_FILE="$BACKUP_DIR/backup_$DATE.sql.gz"
 
     # Show progress
-    echo -e "   ${YELLOW}⏳ Progress:${NC} Creating dump..."
+    echo -ne "   ${YELLOW}Creating dump...${NC}\r"
     
     # mysqldump command to create the backup and compress it
     MYSQL_PWD="$MYSQL_PASSWORD" mysqldump -h $MYSQL_HOST -P $MYSQL_PORT -u $MYSQL_USER $DB_NAME 2>/dev/null | gzip > "$BACKUP_FILE"
@@ -63,18 +58,12 @@ for i in "${!DATABASES[@]}"; do
         FILE_SIZE=$(du -h "$BACKUP_FILE" | cut -f1)
         TOTAL_SIZE=$((TOTAL_SIZE + $(du -b "$BACKUP_FILE" | cut -f1)))
         
-        echo -e "   ${GREEN}✓ Success${NC}"
-        echo -e "   ${GREEN}📦 File:${NC} $BACKUP_FILE"
-        echo -e "   ${GREEN}💾 Size:${NC} $FILE_SIZE"
+        echo -e "   ${GREEN}✓ Success (${FILE_SIZE})${NC}"
         
         SUCCESSFUL_BACKUPS=$((SUCCESSFUL_BACKUPS + 1))
         
         # Delete old backup files (older than 7 days)
-        OLD_FILES=$(find $BACKUP_DIR -type f -name "backup_*.sql.gz" -mtime +7)
-        if [ ! -z "$OLD_FILES" ]; then
-            echo -e "   ${YELLOW}🗑️  Cleaning old backups...${NC}"
-            find $BACKUP_DIR -type f -name "backup_*.sql.gz" -mtime +7 -exec rm {} \;
-        fi
+        find $BACKUP_DIR -type f -name "backup_*.sql.gz" -mtime +7 -delete 2>/dev/null
     else
         echo -e "   ${RED}✗ Failed${NC}"
         FAILED_BACKUPS=$((FAILED_BACKUPS + 1))
@@ -83,21 +72,12 @@ for i in "${!DATABASES[@]}"; do
 done
 
 # Print summary
-echo -e "${CYAN}════════════════════════════════════════════════════════${NC}"
-echo -e "${CYAN}                    BACKUP SUMMARY${NC}"
-echo -e "${CYAN}════════════════════════════════════════════════════════${NC}"
-echo -e "Total Databases:     ${BLUE}${TOTAL_DATABASES}${NC}"
-echo -e "Successful Backups:  ${GREEN}${SUCCESSFUL_BACKUPS}${NC}"
-echo -e "Failed Backups:      ${RED}${FAILED_BACKUPS}${NC}"
-echo -e "Total Size:          ${YELLOW}$(numfmt --to=iec $TOTAL_SIZE 2>/dev/null || echo "$TOTAL_SIZE bytes")${NC}"
-echo -e "${CYAN}════════════════════════════════════════════════════════${NC}"
 echo ""
+echo -e "${BLUE}Summary:${NC} Databases: ${TOTAL_DATABASES} | Success: ${GREEN}${SUCCESSFUL_BACKUPS}${NC} | Failed: ${RED}${FAILED_BACKUPS}${NC}"
 
 # Final status
 if [ $FAILED_BACKUPS -eq 0 ]; then
-    echo -e "${GREEN}✓ All backups completed successfully!${NC}"
-    exit 0
+    echo -e "${GREEN}✓ Done${NC}"
 else
-    echo -e "${RED}✗ Some backups failed.${NC}"
-    exit 1
+    echo -e "${RED}✗ Some backups failed${NC}"
 fi
