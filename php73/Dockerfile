@@ -55,7 +55,7 @@ RUN phpdismod -v 7.3 -s ALL opcache || true
 COPY install.sh /usr/local/bin/install.sh
 RUN chmod +x /usr/local/bin/install.sh && /usr/local/bin/install.sh
 
-WORKDIR /var/www/html
+WORKDIR /var/www
 
 EXPOSE 9000
 
