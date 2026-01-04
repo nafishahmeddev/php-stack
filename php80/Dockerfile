@@ -26,6 +26,7 @@ RUN apt-get install -y \
     php8.0-gmp \
     php8.0-intl \
     php8.0-soap \
+    php8.0-sqlite3 \
     && php -r "readfile('https://getcomposer.org/installer');" | php -- --install-dir=/usr/bin/ --filename=composer \
     && apt-get clean && rm -rf /var/lib/apt/lists/*
 

@@ -27,6 +27,7 @@ RUN apt-get install -y \
     php7.3-gmp \
     php7.3-intl \
     php7.3-soap \
+    php7.3-sqlite3 \
     && php -r "readfile('https://getcomposer.org/installer');" | php -- --install-dir=/usr/bin/ --filename=composer \
     && apt-get clean && rm -rf /var/lib/apt/lists/*
 
