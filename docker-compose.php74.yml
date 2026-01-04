@@ -10,7 +10,7 @@ services:
       - ./php74/php.ini:/etc/php/7.4/fpm/php.ini
       - ./php74/php.ini:/etc/php/7.4/cli/php.ini
       - ./php74/php-fpm.conf:/etc/php/7.4/fpm/pool.d/z-overrides.conf
-      - /var/www:/var/www
+      - ${HOST_WWW_PATH:-/var/www}:/var/www
     networks:
       - php-network
 
