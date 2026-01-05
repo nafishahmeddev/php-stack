@@ -6,6 +6,8 @@ services:
     restart: unless-stopped
     ports:
       - "9084:9000"
+    extra_hosts:
+      - "socket.al-ameen.lo:host-gateway"
     volumes:
       - ./php84/php.ini:/etc/php/8.4/fpm/php.ini
       - ./php84/php.ini:/etc/php/8.4/cli/php.ini
