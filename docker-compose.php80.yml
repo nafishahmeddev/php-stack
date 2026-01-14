@@ -4,6 +4,8 @@ services:
       context: ./php80
     container_name: php80-fpm
     restart: unless-stopped
+    environment:
+      TZ: Asia/Kolkata
     ports:
       - "9080:9000"
     extra_hosts:

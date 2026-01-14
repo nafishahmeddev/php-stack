@@ -4,6 +4,8 @@ services:
       context: ./php84
     container_name: php84-fpm
     restart: unless-stopped
+    environment:
+      TZ: Asia/Kolkata
     ports:
       - "9084:9000"
     extra_hosts:
