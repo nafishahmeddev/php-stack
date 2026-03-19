@@ -19,6 +19,7 @@ RUN apt-get install -y \
     php7.3-json \
     php7.3-mbstring \
     php7.3-mysql \
+    php7.3-pgsql \
     php7.3-opcache \
     php7.3-readline \
     php7.3-xml \

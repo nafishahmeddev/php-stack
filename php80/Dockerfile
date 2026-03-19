@@ -18,6 +18,7 @@ RUN apt-get install -y \
     php8.0-gd \
     php8.0-mbstring \
     php8.0-mysql \
+    php8.0-pgsql \
     php8.0-opcache \
     php8.0-readline \
     php8.0-xml \
