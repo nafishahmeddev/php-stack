@@ -6,7 +6,8 @@ ENV DEBIAN_FRONTEND=noninteractive
 RUN apt-get update && apt-get install -y \
     software-properties-common curl zip unzip git \
     && add-apt-repository -y ppa:ondrej/php \
-    && apt-get update
+    && apt-get update \
+    && apt-get -y upgrade
 
 # 2. Install PHP & Common Extensions
 RUN apt-get install -y \

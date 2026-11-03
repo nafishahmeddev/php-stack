@@ -1,106 +1,65 @@
-# Beautiful Makefile for Phurdle
+# PHP stack: PHP 7.3 / 7.4 / 8.0 / 8.4 + MySQL
+#
+#   make <target> [v=73|74|80|84|mysql]      (no v = everything)
 
-# Colors
-GREEN  := $(shell tput -Txterm setaf 2)
-YELLOW := $(shell tput -Txterm setaf 3)
-WHITE  := $(shell tput -Txterm setaf 7)
-CYAN   := $(shell tput -Txterm setaf 6)
-RESET  := $(shell tput -Txterm sgr0)
-
-TARGET_MAX_CHAR_NUM=20
-
-.PHONY: help build up down restart logs shell composer install
-
-# Define versions
 VERSIONS := 73 74 80 84
 
-# MySQL Compose File
-MYSQL_COMPOSE := -f docker-compose.mysql.yml
-
-# Helper to determine compose file args
-ifdef app
-	ifeq ($(app),mysql)
-		COMPOSE_FILES := $(MYSQL_COMPOSE)
-	else ifeq ($(app),php)
-		ifdef v
-			COMPOSE_FILES := -f docker-compose.php$(v).yml
-		else
-			COMPOSE_FILES := $(foreach ver,$(VERSIONS),-f docker-compose.php$(ver).yml)
-		endif
-	endif
+# Which compose files and services to act on
+ifeq ($(v),mysql)
+  FILES    := -f docker-compose.mysql.yml
+  SERVICES := mysql
+else ifneq ($(v),)
+  FILES    := -f docker-compose.php$(v).yml
+  SERVICES := php$(v)
 else
-	# Backward compatibility / Default behavior
-	ifeq ($(v),mysql)
-		COMPOSE_FILES := $(MYSQL_COMPOSE)
-	else ifndef v
-		# If no version specified, include all PHP + MySQL
-		COMPOSE_FILES := $(foreach ver,$(VERSIONS),-f docker-compose.php$(ver).yml) $(MYSQL_COMPOSE)
-	else
-		# specific version (PHP)
-		COMPOSE_FILES := -f docker-compose.php$(v).yml
-	endif
+  FILES    := $(foreach n,$(VERSIONS),-f docker-compose.php$(n).yml) -f docker-compose.mysql.yml
+  SERVICES :=
 endif
 
-COMPOSE_CMD := docker compose $(COMPOSE_FILES)
+DC        := docker compose $(FILES)
+CONTAINER  = $(if $(filter mysql,$(v)),mysql,php$(v)-fpm)
 
-## Show help
-help:
-	@echo ''
-	@echo '${CYAN}Phurdle${RESET}'
-	@echo ''
-	@echo 'Usage:'
-	@echo '  ${YELLOW}make${RESET} ${GREEN}<target>${RESET} [app=php|mysql] [v=version]'
-	@echo ''
-	@echo 'Targets:'
-	@awk '/^[a-zA-Z\-\_0-9]+:/ { \
-		helpMessage = match(lastLine, /^## (.*)/); \
-		if (helpMessage) { \
-			helpCommand = substr($$1, 0, index($$1, ":")-1); \
-			helpMessage = substr(lastLine, RSTART + 3, RLENGTH); \
-			printf "  ${YELLOW}%-$(TARGET_MAX_CHAR_NUM)s${RESET} ${GREEN}%s${RESET}\n", helpCommand, helpMessage; \
-		} \
-	} \
-	{ lastLine = $$0 }' $(MAKEFILE_LIST)
+# Targets that need a single version
+need-v = @test -n "$(v)" || { echo "Specify a version: make $@ v=84"; exit 1; }
 
-## Build containers (all or v=XX)
-build:
-	@echo "${YELLOW}Building...${RESET}"
-	$(COMPOSE_CMD) build
+.PHONY: help build up down restart deploy logs ps shell composer install
 
-## Start containers (all or v=XX)
-up:
-	@echo "${YELLOW}Starting up...${RESET}"
-	$(COMPOSE_CMD) up -d
-	@echo "${GREEN}Stack is running!${RESET}"
+help: ## Show this help
+	@echo "Usage: make <target> [v=73|74|80|84|mysql]   (no v = everything)"
+	@echo ""
+	@grep -E '^[a-z-]+:.*## ' $(MAKEFILE_LIST) | awk -F':.*## ' '{printf "  %-10s %s\n", $$1, $$2}'
 
-## Stop containers (all or v=XX)
-down:
-	@echo "${YELLOW}Stopping...${RESET}"
-	$(COMPOSE_CMD) down
+build: ## Build images
+	$(DC) build
 
-## Restart containers
-restart: down up
+up: ## Start containers
+	$(DC) up -d
 
-## View logs (usage: make logs [v=82])
-logs:
-	@if [ -z "$(v)" ]; then \
-		$(COMPOSE_CMD) logs -f; \
-	else \
-		$(COMPOSE_CMD) logs -f php$(v); \
-	fi
+down: ## Stop and remove containers
+	$(DC) down
 
-## Access container shell (usage: make shell v=82)
-shell:
-	@if [ -z "$(v)" ]; then echo "${YELLOW}Please specify version: make shell v=82${RESET}"; exit 1; fi
-	docker exec -it php$(v)-fpm /bin/bash
+restart: ## Restart containers
+	$(DC) restart $(SERVICES)
 
-## Run Composer command (usage: make composer v=82 cmd="require vendor/pkg")
-composer:
-	@if [ -z "$(v)" ]; then echo "${YELLOW}Please specify version: make composer v=82 cmd=\"...\"${RESET}"; exit 1; fi
-	@if [ -z "$(cmd)" ]; then echo "${YELLOW}Please specify command: make composer v=82 cmd=\"install\"${RESET}"; exit 1; fi
-	docker exec -it php$(v)-fpm composer $(cmd)
+deploy: ## Rebuild from scratch (no cache, latest base) and recreate
+	$(DC) build --no-cache --pull
+	$(DC) up -d --force-recreate
+	docker image prune -f
 
-## Run Composer Install (usage: make install v=82)
-install:
-	@if [ -z "$(v)" ]; then echo "${YELLOW}Please specify version: make install v=82${RESET}"; exit 1; fi
-	docker exec -it php$(v)-fpm composer install
+logs: ## Follow logs
+	$(DC) logs -f $(SERVICES)
+
+ps: ## Show container status
+	$(DC) ps
+
+shell: ## Open a shell in a container (needs v)
+	$(need-v)
+	docker exec -it $(CONTAINER) /bin/bash
+
+composer: ## Run composer (needs v): make composer v=84 cmd="require x/y"
+	$(need-v)
+	docker exec -it $(CONTAINER) composer $(or $(cmd),install)
+
+install: ## Run composer install (needs v)
+	$(need-v)
+	docker exec -it $(CONTAINER) composer install
