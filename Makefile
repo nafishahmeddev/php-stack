@@ -1,8 +1,8 @@
-# PHP stack: PHP 7.3 / 7.4 / 8.0 / 8.4 + MySQL
+# PHP stack: PHP 7.3 / 7.4 / 8.0 / 8.4 / 8.5 + MySQL
 #
-#   make <target> [v=73|74|80|84|mysql]      (no v = everything)
+#   make <target> [v=73|74|80|84|85|mysql]      (no v = everything)
 
-VERSIONS := 73 74 80 84
+VERSIONS := 73 74 80 84 85
 
 # Which compose files and services to act on
 ifeq ($(v),mysql)
@@ -25,7 +25,7 @@ need-v = @test -n "$(v)" || { echo "Specify a version: make $@ v=84"; exit 1; }
 .PHONY: help build up down restart deploy logs ps shell composer install
 
 help: ## Show this help
-	@echo "Usage: make <target> [v=73|74|80|84|mysql]   (no v = everything)"
+	@echo "Usage: make <target> [v=73|74|80|84|85|mysql]   (no v = everything)"
 	@echo ""
 	@grep -E '^[a-z-]+:.*## ' $(MAKEFILE_LIST) | awk -F':.*## ' '{printf "  %-10s %s\n", $$1, $$2}'
 
