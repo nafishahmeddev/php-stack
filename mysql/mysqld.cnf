@@ -5,7 +5,7 @@ bind-address            = 0.0.0.0
 mysqlx-bind-address     = 0.0.0.0
 
 # Fine Tuning
-key_buffer_size         = 16M
+key_buffer_size = 32M
 myisam-recover-options  = BACKUP
 
 # Logging
@@ -13,13 +13,23 @@ myisam-recover-options  = BACKUP
 max_binlog_size   = 100M
 
 # Optimized configuration (from user request)
-max_connections = 50
-innodb_buffer_pool_size = 1G
-tmp_table_size = 32M
-max_heap_table_size = 32M
-table_open_cache = 200
+max_connections = 200
+innodb_buffer_pool_size = 2G
+tmp_table_size = 64M
+max_heap_table_size = 64M
+table_open_cache = 4000
 sort_buffer_size = 1M
 join_buffer_size = 1M
-innodb_log_file_size = 64M
-innodb_log_buffer_size = 8M
-thread_cache_size = 8
+innodb_log_buffer_size = 16M
+thread_cache_size = 32
+
+#loosing security
+sql_mode=""
+innodb_redo_log_capacity = 512M
+innodb_flush_method = O_DIRECT
+table_definition_cache = 2000
+skip_name_resolve = ON
+binlog_expire_logs_seconds = 604800
+slow_query_log = ON
+long_query_time = 1
+slow_query_log_file = /var/lib/mysql/slow.log
